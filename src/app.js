@@ -1,7 +1,8 @@
 import express from 'express';
 import cors from 'cors';
-import info from '../package.json';
+import router from './routes/users.routes';
 
+import info from '../package.json';
 const app = express();
 
 app.set('info', info);
@@ -11,6 +12,8 @@ app.set('port', process.env.PORT || 4001);
 app.use(express.json());
 app.use(cors()); //establece las reglas por nosotros para permitir comunicarse entre servidores.
 
+//ruta user
+app.use('/api/user',router)
 
 app.use('/', (req, res) => {
     res.json({
