@@ -1,5 +1,5 @@
-
-
+//dotenv sintaxys con ECMAScript
+import './database';
 import app from './app';
 
 const main = () => {
