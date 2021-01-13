@@ -1,48 +1,50 @@
- import twitchAccessToken from './twitch.Token';
- import fetch from 'node-fetch';
+import twitchAccessToken from './twitch.Token';
+import fetch from 'node-fetch';
+//get
+export const topGames = async (cant) => {
+    try{
+        const access_token = await twitchAccessToken();
 
-// // export const streamer = async () => {
-// //     try{
-// //         const tokenData =  await getToken();
-// //         console.log(tokenData)
-// //         const res = await fetch(`https://api.twitch.tv/helix/search/channels?query=shompys&client-id=${process.env.TWITCH_CLIENT_ID}&Authorization: Bearer ${tokenData.access_token}`)
-// //         const data = await res.json();
-// //         console.log(data);
-// //     }catch(e){
-// //         console.log(e);
-// //     }
+        const response = await fetch(`https://api.twitch.tv/helix/games/top?first=${cant}`,{
+            headers: {
+                'Authorization': `Bearer ${access_token}`,
+                'Client-Id': process.env.TWITCH_CLIENT_ID
+            }
+        })
 
-// // }
-// export const Authorization = async () => {
-//     try{
+        return await response.json();
 
-//         const t = await getToken();
-//         const res = await fetch(`https://id.twitch.tv/helix`,{
-//             method: 'post',
-//             headers : {
-//                 Authorization: `${t.token_type} ${t.access_token}` 
-//             }
-//         })
-//         const data = await res.json();
-//         console.log(data)
-//     }catch(e){
-//         console.log(e);
-//     }
-// }
-// export const topGames = async (access_token) => {
-//     try{
+    }catch(e){
+        
+        console.log(`Error en apiTwitch metodo topGames: ${e}`)
+        return {error: e}
+    }
+}
+export const game = async (param) => {
 
-       
-//         const res = await fetch(`https://api.twitch.tv/helix/games/top?first=2`,{
-//             headers: {
-//                 'Authorization': `Bearer ${access_token}`,
-//                 'Client-Id': process.env.TWITCH_CLIENT_ID
-//             }
-//         })
-//         const data = await res.json();
-//         console.log(data)
+    try{
+    // pregunta ¿no es un numero?
+    // respuesta si no es un numero devuelve true. :)
+    let search
+    if(isNaN(parseInt(param, 10))){
+        search = `name=${param}`;
+    }else{
+        search = `id=${param}`;
+    }
+        const access_token = await twitchAccessToken();
+        const response = await fetch(`https://api.twitch.tv/helix/games?${search}`,{
+            headers:{
+                'Authorization': `Bearer ${access_token}`,
+                'Client-Id': process.env.TWITCH_CLIENT_ID
+            }
+        })
+        return await response.json();
+        
+    }catch(e){
+        console.log(`Error en apiTwitch metodo game: ${e}` )
+        return {error:e}
+    }
 
-//     }catch(e){
-//         console.log(e)
-//     }
-// }
+}
+
+

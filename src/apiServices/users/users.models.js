@@ -7,7 +7,7 @@ const userSchema = new Schema({
     email: {type: String, required:true, unique: true},
     password: {type: String, required: true},
     roles: [
-        {ref: 'roles', type: Schema.Types.ObjectId}//relacion de 1 a n (un user puede tener muchos roles) sin esto funciona igual entender
+        {ref: 'roles', type: Schema.Types.ObjectId}//relacion de 1 a n (un user puede tener muchos roles)
     ]
 }, 
 {
