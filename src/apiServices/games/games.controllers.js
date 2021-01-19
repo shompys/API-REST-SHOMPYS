@@ -3,9 +3,16 @@ import {apiTwitch} from '../../api/index'
 export const listGames = async (req, res) => {
 
     try{
-        const data = await apiTwitch.topGames(20)
-        console.log(data)
-        res.json(data)
+        const data = await apiTwitch.topGames(100);
+        const format = data.data.map(({id, name, box_art_url}) => {
+            return{
+            id,
+            name,
+            box_art_url: box_art_url.replace('{width}', 150).replace('{height}', 185)
+            }
+        });
+        console.log(format)
+        res.json(format)
 
     }catch(e){
         console.log(`Error listGames :${e}`)
@@ -21,8 +28,9 @@ export const game = async (req,res) => {
         if(data.data.length === 0){ 
             throw {error: 'el array esta vacio'};
         }
-
-        res.json(data.data)
+        const format = data.data[0];
+        console.log(format)
+        res.json(format)
 
     }catch(e){
         console.log(e)

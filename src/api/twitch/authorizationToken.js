@@ -30,6 +30,19 @@ export const saveToken = async (props) => {
 
 }
 
+export const timeToken = query => {
+
+    const limit = query.expires_in          //limite estipulado por twitch
+    const upd = query.updatedAt.getTime()   //fecha ultima modificada
+    const d = new Date();                   //fecha actual
+    const current = d.getTime();            //fecha actual en unix
+    const result = current - upd            //unix tiempo transcurrido desde creacion               
+    const expired = limit - result;         //unix restante
+    //console.log(expired)
+    console.log(`timeToken: ${expired}`);
+    return expired;
+}
+
 
 
 

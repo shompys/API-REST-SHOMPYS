@@ -1,4 +1,4 @@
-import {getToken, saveToken} from './authorizationToken';
+import {getToken, saveToken, timeToken} from './authorizationToken';
 import twitchTokenModel from './twitch.Token.models';
 
 const twitchAccessToken = async () => {
@@ -12,20 +12,15 @@ const twitchAccessToken = async () => {
         console.log('first run, api twitch');
         return tk.access_token;
     }
-    
+    //devuelve time del token client to client
+    const expired = timeToken(query);
 
-    const limit = query.expires_in          //limite estipulado por twitch
-    const upd = query.updatedAt.getTime()   //fecha ultima modificada
-    const d = new Date();                   //fecha actual
-    const current = d.getTime();            //fecha actual en unix
-    const result = current - upd            //unix tiempo transcurrido desde creacion                   
-    const expired = limit - result;         //unix restante
-    //console.log(expired)
-
-    if(expired <= 0){
+    if(expired <= 120000){
+        console.log(`expiro token: ${expired}`)
         const token = await getToken();
         const obj = { id: query._id, token}
         const tk = await saveToken(obj);
+        console.log('updated token time, api twitch')
         return tk.access_token;
     }
     // topGames(query.access_token);

@@ -1,6 +1,7 @@
 import twitchAccessToken from './twitch.Token';
+import broadCaster from './broadCaster';
 import fetch from 'node-fetch';
-//get
+//get list games img
 export const topGames = async (cant) => {
     try{
         const access_token = await twitchAccessToken();
@@ -20,6 +21,7 @@ export const topGames = async (cant) => {
         return {error: e}
     }
 }
+// get one game img
 export const game = async (param) => {
 
     try{
@@ -46,5 +48,25 @@ export const game = async (param) => {
     }
 
 }
+//get clips video
+export const clips = async (cant) => {
+    try{
+        const access_token = await twitchAccessToken();
+        const broadcaster =  await broadCaster('shompys');
+        
+        const response = await fetch(`https://api.twitch.tv/helix/clips?broadcaster_id=${broadcaster.id}&first=${cant}`,{
+            headers:{
+                'Authorization': `Bearer ${access_token}`,
+                'Client-Id': process.env.TWITCH_CLIENT_ID
+            }
+        })
+        return await response.json();
+    }catch(e){
+        console.log(`Error en apiTwitch metodo clips ${e}`);
+        return {error: e}
+    }
+}
+
+
 
 
