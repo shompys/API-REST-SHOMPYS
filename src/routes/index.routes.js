@@ -8,8 +8,10 @@ import routerDocumentation from '../apiServices/documentation/documentation';
 
 
 router.use('/authorize', routerClient);
-router.use('/api/users', routerUser);
+router.use('/api/users',  routerUser);
 router.use('/api/games', routerGames);
 router.use('/api/clips', routerClips);
 router.use('/', routerDocumentation);
+
+
 export default router;

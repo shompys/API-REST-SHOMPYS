@@ -3,38 +3,43 @@ import userModel from './users.models';
 
 export const createUser =  async (req, res) => {
     
-    try{
-        const {name, username, email, password, roles} = req.body
+    // try{
         
-        const newUser = new userModel({name, 
-                                        username, email, 
-                                        password: await userModel.encryptPassword(password)
-                                        })
+        // const newUser = new userModel({name, 
+        //                                 username, email, 
+        //                                 password: await userModel.encryptPassword(password)
+        //                                 })
                                         
-        // exist roles add user
-        if(roles){
-            const addRoles = await roleModel.find({name: {$in: roles}});
-            //si no existe ninguno de los roles
-            if(addRoles.length === 0) throw 'the role does not exist';
-            newUser.roles = addRoles.map(roleId => roleId._id);
-            //si no existen los roles default user
-        }else{
-            const role = await roleModel.find({name:'user'});
-            console.log(role)
-            newUser.roles = [role._id];
-        }
-        const userSaved = await newUser.save();
+        // // exist roles add user
+        // if(roles){
+        //     const addRoles = await roleModel.find({name: {$in: roles}});
+        //     //si no existe ninguno de los roles
+        //     if(addRoles.length === 0) throw new Error('the role does not exist');
+        //     newUser.roles = addRoles.map(roleId => roleId._id);
+        //     //si no existen los roles default user
+        // }else{
+        //     const role = await roleModel.findOne({name:'user'});
+        //     newUser.roles = [role._id];
+        // }
+        // const userSaved = await newUser.save();
+        res.status(201).json({'dato': 'de 10'})
+        // res.status(201).json(userSaved)
 
-        res.status(201).json(userSaved)
-
-    }catch(e){
+    // }catch(e){
         //faltan errores
-        console.log(`Error post-user ${e}`)
-        res.json({e})
-        if(e === 'the role does not exist'){
-            res.status(404).json({error: e, code: 404, tip: 'put a valid role or leave blank to assign default'})
-        }
-    }
+        // console.log(`er: ${e}`)
+        // if(e.toString() === 'Error: name must be a string'){
+        //     res.status(400).json({'error': 'name must be a string'});
+        // }
+        
+        // if(e === 'the role does not exist'){
+        //     res.json({'error': e})
+        // }
+        // // res.json(e)
+        // if(e === 'the role does not exist'){
+        //     res.status(404).json({error: e, code: 404, tip: 'put a valid role or leave blank to assign default'})
+        // }
+    // }
 }
 
 export const getUsers = async (req, res) => {
@@ -56,7 +61,7 @@ export const getUserById = async (req, res) => {
         
     }catch(e){
         console.log('error: '+e)
-        res.status(404).json('pusiste mal el id so boludo o no teni webo: '+ req.params.id)
+        res.status(404).json('this ID is invalid: '+ req.params.id)
     }
 
 }

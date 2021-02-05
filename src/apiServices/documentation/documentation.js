@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     <li>/authorize -post {client_id, client_secret}</li>
     <li>/api/users (get, get/id, post, put, delete)</li>
     <li>/api/games (get, get/id -> puede ser id o name</li>
-    <li>/api/clips (get </li>`)
+    <li>/api/clips (get) </li>`)
     
 })
 export default router;

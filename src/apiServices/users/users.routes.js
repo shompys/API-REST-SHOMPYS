@@ -2,9 +2,9 @@ import {Router} from 'express';
 const router = Router();
 
 import * as usersControllers from './users.controllers';
-import {verifyToken} from '../../middlewares/index';
+import {verifyToken, validateUser} from '../../middlewares/index';
 
-router.post('/', usersControllers.createUser);
+router.post('/', validateUser, usersControllers.createUser);
 
 router.get('/', usersControllers.getUsers);
 

@@ -1,3 +1,4 @@
 import {verifyToken} from './authorize';
-
-export { verifyToken };
+import {errorHandler} from './errorHandler';
+import { validateUser } from './validations';
+export { verifyToken, errorHandler, validateUser };

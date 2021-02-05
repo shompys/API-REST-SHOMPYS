@@ -1,7 +1,7 @@
 import clientModel from './auth.models';
 import config from '../config';
 import jwt from 'jsonwebtoken';
-
+//validar y authenticar el cliente aun no funciona
 export const createClient = async (req, res) => {
     
     try{
@@ -27,7 +27,7 @@ export const updateClient = async (req, res) => {
     try{
         const {client_id, client_secret} = req.body;
         //descifrar hash
-        const updateClient = await clientModel.findByIdAndUpdate(req.params.id, )
+        const updateClient = await clientModel.findByIdAndUpdate(req.params.id)
     }catch(e){
         console.log(`Error put-Client: ${e}`);
     }
