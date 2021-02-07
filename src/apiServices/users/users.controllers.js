@@ -5,7 +5,7 @@ export const createUser =  async (req, res) => {
     
     // try{
         
-        // const newUser = new userModel({name, 
+        // const newUser = new userModel({name, lastname,
         //                                 username, email, 
         //                                 password: await userModel.encryptPassword(password)
         //                                 })
@@ -15,6 +15,7 @@ export const createUser =  async (req, res) => {
         //     const addRoles = await roleModel.find({name: {$in: roles}});
         //     //si no existe ninguno de los roles
         //     if(addRoles.length === 0) throw new Error('the role does not exist');
+        
         //     newUser.roles = addRoles.map(roleId => roleId._id);
         //     //si no existen los roles default user
         // }else{
