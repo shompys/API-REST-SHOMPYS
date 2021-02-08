@@ -2,7 +2,14 @@ import roleModel from '../roles/roles.models';
 import userModel from './users.models';
 
 export const createUser =  async (req, res) => {
-    
+    const {name, lastname, username, email, password,roles} = req.body;
+    const newUser = new userModel({
+        name,
+        lastname,
+        username,
+        email,
+        password : await userModel.encryptPassword(password)
+    })
     // try{
         
         // const newUser = new userModel({name, lastname,

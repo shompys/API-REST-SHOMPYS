@@ -1,10 +1,11 @@
 
-export const errorHandler = async (err, req, res, next) => {
+export const errorHandler = async (err,req,res,next) => {
+
     console.log(err);
-    
-    await res.status(400).json({
-        status: 400,
+
+    await res.status(err[0].status).json({
         errors: err
     })
+
     next();
 }
