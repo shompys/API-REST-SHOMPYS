@@ -1,5 +1,6 @@
 import userModel from '../apiServices/users/users.models';
-import roleModel from '../apiServices/roles/roles.models';
+// import roleModel from '../apiServices/roles/roles.models';
+import * as rolesMethod from '../apiServices/roles/roles.querys';
 
 export const validateName = name => {
     let errors = [];
@@ -75,7 +76,8 @@ export const validatePassword = password => {
 export const validateRoles = async roles => {
     let errors = []
 
-    const resp = await roleModel.find({ name: { $in: roles } });
+    // const resp = await roleModel.find({ name: { $in: roles } });
+    const resp = await rolesMethod.verifyRoles(roles);
     resp.length === 0 && (errors = [...errors, `Roles does not exist`]);
     return errors;
 }

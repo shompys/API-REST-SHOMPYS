@@ -12,10 +12,10 @@ export const validateUser = async (req, res, next) => {
 
     //verify in db response promise : 
     const errorsUsername = await validator.validateUsername(username);
-    if(errorsUsername.length > 0) data = [ ...data, {status: 400, field : 'username', errors : errorsUsername}];
+    if(errorsUsername.length > 0) data = [ ...data, {status: 409, field : 'username', errors : errorsUsername}];
 
     const errorsEmail = await validator.validateEmail(email);
-    if(errorsEmail.length > 0) data = [ ...data, {status: 400, field : 'email', errors : errorsEmail}];
+    if(errorsEmail.length > 0) data = [ ...data, {status: 409, field : 'email', errors : errorsEmail}];
 
     if(validator.validatePassword(password).length > 0) data = [ ...data, {status: 400, field : 'password', errors : validator.validatePassword(password)}];
 

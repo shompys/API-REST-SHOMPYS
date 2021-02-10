@@ -1,96 +1,92 @@
-import roleModel from '../roles/roles.models';
+import * as rolesMethod from '../roles/roles.querys';
 import userModel from './users.models';
 
-export const createUser =  async (req, res) => {
-    const {name, lastname, username, email, password,roles} = req.body;
+export const createUser = async (req, res) => {
+    const { name, lastname, username, email, password, roles } = req.body;
+
+    //En esta instancia debe existir almenos 1 a n roles
+    const resp = await rolesMethod.verifyRoles(roles);
+    const rolesId = resp.map(roleId => roleId._id);
+
     const newUser = new userModel({
         name,
         lastname,
         username,
         email,
-        password : await userModel.encryptPassword(password)
-    })
-    // try{
-        
-        // const newUser = new userModel({name, lastname,
-        //                                 username, email, 
-        //                                 password: await userModel.encryptPassword(password)
-        //                                 })
-                                        
-        // // exist roles add user
-        // if(roles){
-        //     const addRoles = await roleModel.find({name: {$in: roles}});
-        //     //si no existe ninguno de los roles
-        //     if(addRoles.length === 0) throw new Error('the role does not exist');
-        
-        //     newUser.roles = addRoles.map(roleId => roleId._id);
-        //     //si no existen los roles default user
-        // }else{
-        //     const role = await roleModel.findOne({name:'user'});
-        //     newUser.roles = [role._id];
-        // }
-        // const userSaved = await newUser.save();
-        res.status(201).json({'dato': 'de 10'})
-        // res.status(201).json(userSaved)
+        password: await userModel.encryptPassword(password),
+        roles: rolesId
 
-    // }catch(e){
-        //faltan errores
-        // console.log(`er: ${e}`)
-        // if(e.toString() === 'Error: name must be a string'){
-        //     res.status(400).json({'error': 'name must be a string'});
-        // }
-        
-        // if(e === 'the role does not exist'){
-        //     res.json({'error': e})
-        // }
-        // // res.json(e)
-        // if(e === 'the role does not exist'){
-        //     res.status(404).json({error: e, code: 404, tip: 'put a valid role or leave blank to assign default'})
-        // }
-    // }
+    })
+
+    const userSaved = await newUser.save();
+    console.log(userSaved);
+    res.status(201).json(userSaved);
+
 }
 
 export const getUsers = async (req, res) => {
-    try{
-        //si no agrego el status por defecto devuelve el cod 200
-        const usersSend = await userModel.find();
-        res.json(usersSend)
 
-    }catch(e){
-        console.log(e)
-    }
+    //si no agrego el status por defecto devuelve el cod 200
+    const usersSend = await userModel.find();
+    res.status(200).json(usersSend);
+
 }
 
-export const getUserById = async (req, res) => {
+export const getUserById = async (req, res, next) => {
 
-    try{
-        const userSearch = await userModel.findById(req.params.id)
+    try {
+        const userSearch = await userModel.findById(req.params.id);
+
         res.status(200).json(userSearch);
-        
-    }catch(e){
-        console.log('error: '+e)
-        res.status(404).json('this ID is invalid: '+ req.params.id)
+
+    } catch (e) {
+        // console.log(e)
+        let errors = [];
+        errors = [...errors, { status: 404, error: `This ID is invalid ${req.params.id}` }]
+        return next(errors);
+
     }
 
 }
 
-export const updateUserById = async (req, res) => {
-    try{
+export const updateUserById = async (req, res, next) => {
+    try {
         //new true le indicamos que nos devuelva los datos actualizados sino devuelve los viejos
-        const {name, username, email, password, roles} = req.body;
-        const upUser = {name, username, email, password: await userModel.encryptPassword(password), roles}
-        const updatedUser = await userModel.findByIdAndUpdate(req.params.id, upUser, {new: true})
-        res.status(201).json(updatedUser)
-    }catch(e){
-        console.log(e)
+        const resp = await rolesMethod.verifyRoles(roles);
+        const rolesId = resp.map(roleId => roleId._id);
+
+        const { name, lastname, username, email, password, roles } = req.body;
+        const upUser = {
+            name,
+            lastname,
+            username,
+            email,
+            password: await userModel.encryptPassword(password),
+            roles: rolesId
+        }
+        const updatedUser = await userModel.findByIdAndUpdate(req.params.id, upUser, { new: true });
+        console.log(updatedUser);
+        res.status(200).json({status : 200, message: `The user with ID: ${updatedUser._id} has been updated successfully`});
+    } catch (e) {
+        // console.log(e)
+        let errors = [];
+        errors = [...errors, { status: 404, error: `This ID is invalid ${req.params.id}` }]
+        return next(errors);
     }
 }
 
-export const deleteUserById = async (req, res) => {
-    try{
-        const deleteUser = await usersModels.findByIdAndDelete(req.params.id)
-        res.status(204).json('true')
-    }catch(e){
-        console.log(e);
+export const deleteUserById = async (req, res, next) => {
+    try {
+        const deleteUser = await userModel.findByIdAndDelete(req.params.id);
+        //si el id respeta 24 caracteres no genera error el metodo findByIdAndDelete pero retorna null.
+        console.log(deleteUser);
+        if(deleteUser === null) throw new Error('null');
+        
+        res.status(200).json({status: 200, message: `The user with ID: ${deleteUser._id} and username: ${deleteUser.username} has been successfully removed`})
+    } catch (e) {
+        // console.log(e);
+        let errors = [];
+        errors = [...errors, {status: 404, error: `This ID is invalid ${req.params.id}` }]
+        return next(errors);
     }
 }

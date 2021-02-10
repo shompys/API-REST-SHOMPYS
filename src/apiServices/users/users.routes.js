@@ -10,7 +10,7 @@ router.get('/', usersControllers.getUsers);
 
 router.get('/:id', usersControllers.getUserById);
 
-router.put('/:id', usersControllers.updateUserById);
+router.put('/:id', validateUser, usersControllers.updateUserById);
 
 router.delete('/:id', usersControllers.deleteUserById);
 
