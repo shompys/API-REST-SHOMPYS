@@ -1,24 +1,47 @@
 import clientModel from './auth.models';
-import config from '../config';
 import jwt from 'jsonwebtoken';
-//validar y authenticar el cliente aun no funciona
-export const createClient = async (req, res) => {
+
+export const createClient = async (req, res, next) => {
+    //Por el momento solo es una unica clave a la app en general
+    
     
     try{
-         const {client_secret} = req.body;
-
-         const client = new clientModel({client_secret});
-         const savedClient = await client.save();
-        // // receives three parameters: id ,, secret word and time setting
-        //console.log(process.env.SECRET)
-         console.log(savedClient);
-         const access_token = jwt.sign({id : savedClient._id}, savedClient.client_secret, { expiresIn: 86400 });
-         res.header('access-token', access_token).json({});
-         console.log(access_token)
+        const {client_secret} = req.headers;
+        if(!(process.env.CLIENT_SECRET === client_secret)) throw new Error(`invalid client_secret or not exist :(`);
+        const client = new clientModel({client_secret : await clientModel.encryptClient_secret(client_secret)});
+        const savedClient = await client.save();
+        const token = jwt.sign({id: client._id}, client_secret);
+        console.log(token);
+        res.json(token);
+        
     }catch(e){
-        console.log(`Error post-Client: ${e}`);
-        res.json(`Error: ${e}`)
+        
+        return next([{status: 401, error: e.message}])
+        
     }
+    
+
+    
+    // const savedClient = await client.save();
+
+    // jwt.sign(savedClient, )
+
+
+    // try{
+    //      const {client_secret} = req.body;
+
+    //      const client = new clientModel({client_secret});
+    //      const savedClient = await client.save();
+    //     // // receives three parameters: id ,, secret word and time setting
+    //     //console.log(process.env.SECRET)
+    //      console.log(savedClient);
+    //      const access_token = jwt.sign({id : savedClient._id}, savedClient.client_secret, { expiresIn: 86400 });
+    //      res.header('access-token', access_token).json({});
+    //      console.log(access_token)
+    // }catch(e){
+    //     console.log(`Error post-Client: ${e}`);
+    //     res.json(`Error: ${e}`)
+    // }
     
      
 }

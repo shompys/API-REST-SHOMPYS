@@ -15,7 +15,11 @@ const userSchema = new Schema({
     timestamps: true,
     versionKey: false 
 })
-
+// userSchema.pre('save', async (next) => {
+//     const hash = await bcrypt.hash(this.password, 10);
+//     this.password = hash;
+//     next();
+// })
 userSchema.statics.encryptPassword = async (password) => {
 
     const salt = await bcrypt.genSalt(10);//cant. veces aplicar algoritmo de encrypt

@@ -40,10 +40,8 @@ export const getUserById = async (req, res, next) => {
         res.status(200).json(userSearch);
 
     } catch (e) {
-        // console.log(e)
-        let errors = [];
-        errors = [...errors, { status: 404, error: `This ID is invalid ${req.params.id}` }]
-        return next(errors);
+        
+        return next([{ status: 404, error: `This ID is invalid ${req.params.id}` }]);
 
     }
 
@@ -69,9 +67,7 @@ export const updateUserById = async (req, res, next) => {
         res.status(200).json({status : 200, message: `The user with ID: ${updatedUser._id} has been updated successfully`});
     } catch (e) {
         // console.log(e)
-        let errors = [];
-        errors = [...errors, { status: 404, error: `This ID is invalid ${req.params.id}` }]
-        return next(errors);
+        return next([{ status: 404, error: `This ID is invalid ${req.params.id}` }]);
     }
 }
 
@@ -84,9 +80,7 @@ export const deleteUserById = async (req, res, next) => {
         
         res.status(200).json({status: 200, message: `The user with ID: ${deleteUser._id} and username: ${deleteUser.username} has been successfully removed`})
     } catch (e) {
-        // console.log(e);
-        let errors = [];
-        errors = [...errors, {status: 404, error: `This ID is invalid ${req.params.id}` }]
-        return next(errors);
+        
+        return next([{status: 404, error: `This ID is invalid ${req.params.id}` }]);
     }
 }
