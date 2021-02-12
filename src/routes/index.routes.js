@@ -12,6 +12,7 @@ router.use('/authorize', routerClient);
 router.use('/api/users', verifyToken, routerUser);
 router.use('/api/games', verifyToken,routerGames);
 router.use('/api/clips', verifyToken,routerClips);
+router.use('/api', verifyToken);// no hay ruta
 router.use('/', routerDocumentation);
 
 export default router;
