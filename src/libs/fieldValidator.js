@@ -6,7 +6,7 @@ export const validateName = name => {
     let errors = [];
     const isOnlyString = /^[a-z]+$/gi;
 
-    if (name === undefined || name === '') return [...errors, `Name is required`];
+    if (name === undefined || name.trim().length === 0) return [...errors, `Name is required`];
 
     !isOnlyString.test(name) && (errors = [...errors, `Invalid format`]);
 
@@ -20,7 +20,7 @@ export const validateLastName = lastName => {
     let errors = [];
     const isOnlyString = /^[a-z]+$/gi;
 
-    if (lastName === undefined || lastName === '') return [...errors, `LastName is required`];
+    if (lastName === undefined || lastName.trim().length === 0) return [...errors, `LastName is required`];
 
     !isOnlyString.test(lastName) && (errors = [...errors, `Invalid format`]);
 
@@ -34,7 +34,7 @@ export const validateUsername = async username => {
     let errors = [];
     const isValidFormat = /^[\w\-]+$/gi; //Deberia admitir unicamente letras, numeros, '-', '_'.
 
-    if (username === undefined || username === '') return [...errors, `Username is required`];
+    if (username === undefined || username.trim().length === 0) return [...errors, `Username is required`];
 
     !isValidFormat.test(username) && (errors = [...errors, `Invalid format`]);
 
@@ -52,7 +52,7 @@ export const validateEmail = async email => {
     let errors = [];
     const isValidFormat = /^[\w._-]+@[\w._-]+\.[\w._-]+$/gi;
 
-    if (email === undefined || email === '') return [...errors, `Email is required`];
+    if (email === undefined || email.trim().length === 0) return [...errors, `Email is required`];
 
     !isValidFormat.test(email) && (errors = [...errors, `Invalid format`]);
 
@@ -69,7 +69,7 @@ export const validateEmail = async email => {
 export const validatePassword = password => {
     let errors = [];
 
-    if (password === undefined || password === '') return [...errors, `Password is required`];
+    if (password === undefined || password.trim().length === 0) return [...errors, `Password is required`];
 
     return errors;
 }
